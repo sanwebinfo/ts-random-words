@@ -199,6 +199,7 @@ body {
                       <span class="slider"></span>
                   </label>
               </div>
+            <div id="notification" class="notification is-hidden"></div>
             <div id="wordContainer" class="word-container box">
                 <div class="word-box">
                     <p id="word">Loading...</h1>
@@ -209,7 +210,6 @@ body {
             <div class="has-text-centered">
                 <button class="button is-info" onclick="fetchWordData()">Refresh Word</button>
             </div>
-            <div id="notification" class="notification is-hidden"></div>
         </div>
         </div>
         </div>
@@ -258,36 +258,59 @@ canonicalLink.setAttribute('href', window.location.href);
     });
   
     initTheme();
-        async function fetchWordData() {
-            try {
-                const response = await fetch('/words');
-                const data = await response.json();
-                if (data.error) {
-                    showNotification('Error fetching word data. Please try again.', 'danger');
-                } else {
-                    displayWordData(data[0]);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                showNotification('Error fetching word data. Please try again.', 'danger');
-            }
-        }
-        function displayWordData(wordData) {
-            const wordElement = document.getElementById('word');
-            const definitionElement = document.getElementById('definition');
-            const pronunciationElement = document.getElementById('pronunciation');
 
-            wordElement.textContent = '✍️ Word: ' + wordData.word || 'Not Found';
-            definitionElement.textContent = '📚 Definition: ' + (wordData.definition || 'Not Found');
-            pronunciationElement.textContent = '🗣 Pronunciation: ' + (wordData.pronunciation || 'Not Found');
+async function fetchWordData() {
+    const wordElement = document.getElementById('word');
+    const definitionElement = document.getElementById('definition');
+    const pronunciationElement = document.getElementById('pronunciation');
+
+    wordElement.textContent = '✍️ Word: Loading new word...';
+    definitionElement.textContent = '📚 Definition: Fetching definition...';
+    pronunciationElement.textContent = '🗣 Pronunciation: Updating pronunciation...';
+
+    try {
+        const response = await fetch('/words');
+        if (!response.ok) {
+            throw new Error(`Error: ${response.statusText}`);
         }
-        function showNotification(message, type = 'warning') {
-            const notificationElement = document.getElementById('notification');
-            notificationElement.classList.remove('is-hidden');
-            notificationElement.classList.add(`is-${type}`);
-            notificationElement.textContent = message;
+
+        const data = await response.json();
+        if (!data || !data[0]) {
+            throw new Error('No word data found.');
         }
-        window.onload = fetchWordData;
+
+        displayWordData(data[0]);
+        //showNotification('Word data updated successfully!', 'success');
+    } catch (error) {
+        console.error('Error:', error);
+        showNotification('Failed to fetch word data. Please try again.', 'danger');
+
+        wordElement.textContent = wordElement.textContent || '✍️ Word: Not Found';
+        definitionElement.textContent = definitionElement.textContent || '📚 Definition: Not Found';
+        pronunciationElement.textContent = pronunciationElement.textContent || '🗣 Pronunciation: Not Found';
+    }
+}
+function displayWordData(wordData) {
+    const wordElement = document.getElementById('word');
+    const definitionElement = document.getElementById('definition');
+    const pronunciationElement = document.getElementById('pronunciation');
+
+    wordElement.textContent = '✍️ Word: ' + (wordData.word || 'Not Found');
+    definitionElement.textContent = '📚 Definition: ' + (wordData.definition || 'Not Found');
+    pronunciationElement.textContent = '🗣 Pronunciation: ' + (wordData.pronunciation || 'Not Found');
+}
+function showNotification(message, type = 'warning') {
+    const notificationElement = document.getElementById('notification');
+    notificationElement.textContent = message;
+    notificationElement.classList.remove('is-hidden', 'is-success', 'is-danger', 'is-warning');
+    notificationElement.classList.add(`is-${type}`);
+    notificationElement.style.display = 'block';
+
+    setTimeout(() => {
+        notificationElement.style.display = 'none';
+    }, 1500);
+}
+window.onload = fetchWordData;
 </script>
 </body>
 </html>
