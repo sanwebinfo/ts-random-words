@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+  <link href="/192.png" rel="icon" sizes="192x192" type="image/png">
+  <title>Random Words - Word of the Day</title>
+  <meta name="description" content="Get Random Words with Definition and Pronunciation." />
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/1.0.2/css/bulma.min.css" integrity="sha512-RpeJZX3aH5oZN3U3JhE7Sd+HG8XQsqmP3clIbu4G28p668yNsRNj3zMASKe1ATjl/W80wuEtCx2dFA8xaebG5w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap" rel="stylesheet">
+<style>
+html, body {
+	min-height: 100vh;
+	margin: 0;
+	padding: 0;
+	overflow-x: hidden;
+	font-family: "Geist Mono", serif;
+  word-wrap: break-word;
+}
+body {
+	background-color: #ddd4b3;
+	color: #121212;
+    font-family: 18px;
+	padding-bottom: 20px;
+}
+.title {
+  font-family: "Geist Mono", serif;
+    text-align: center;
+  }
+  select {
+    font-family: "Geist Mono", serif;
+  }
+  option {
+    font-family: "Geist Mono", serif;
+  }
+  .input {
+    font-family: "Geist Mono", serif;
+    
+  }
+  textarea {
+    font-family: "Geist Mono", serif;
+  }
+  .button {
+    font-family: "Geist Mono", serif;
+    margin-top: 10px;
+  }
+.box {
+  position: relative;
+  background: #70135b;
+  border: 1px solid #B33771;
+  color: #F8EFBA;
+  margin-bottom: 10px;
+  border-radius: 20px;
+  padding: 30px;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  font-family: "Geist Mono", serif;
+  letter-spacing: .04em;
+  transition: opacity 0.5s ease-in-out, transform 0.3s ease-in-out;
+}
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 34px;
+    height: 20px;
+  }
+  
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #f57d7d;
+    transition: 0.4s;
+    border-radius: 34px;
+  }
+  
+  .slider::before {
+    position: absolute;
+    content: '';
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 3px;
+    background-color: #e9e3e3;
+    transition: 0.4s;
+    border-radius: 50%;
+  }
+  
+  input:checked + .slider {
+    background-color: #35a00a;
+  }
+  
+  input:checked + .slider::before {
+    transform: translateX(14px);
+  }
+  body.dark-mode {
+    background-color: #392e4a;
+    color: #121212;
+    padding-bottom: 20px;
+  }
+  .dark-mode .box {
+  background-image: linear-gradient(to right top, #32072b, #290924, #21081d, #1a0617, #10030e);
+  border: 1px solid #9a74f1;
+ }
+  .text-all {
+    font-family: "Geist Mono", serif;
+    color: #041242;
+  }
+  .title {
+    font-family: "Geist Mono", serif;
+    color: #1e201e;
+  }
+  .dark-mode .title {
+    font-family: "Geist Mono", serif;
+    color: #82f395;
+  }
+  .dark-mode .text-all {
+    font-family: "Geist Mono", serif;
+    color: #f1d75f;
+  }
+  input::-webkit-input-placeholder {
+    color: #1f0505;
+  }
+  
+  input:-moz-placeholder {
+    color: #1f0505;
+  }
+  
+  input::-moz-placeholder {
+    color: #1f0505;
+  }
+  
+  input:-ms-input-placeholder {
+    color: #1f0505;
+  }
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-10px); }
+      50% { transform: translateX(10px); }
+      75% { transform: translateX(-10px); }
+      100% { transform: translateX(0); }
+    }
+    .shake {
+      animation: shake 0.5s ease-in-out;
+    }
+  p {
+    word-wrap: break-word;
+    overflow-x: auto;
+  }
+  .notification {
+    display: none;
+    position: center;
+    background-color: #8d290b;
+    color: rgb(245, 243, 147);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    font-family: "Geist Mono", serif;
+    font-weight: 600;
+    align-items: center;
+    word-wrap: break-word;
+    overflow-x: auto;
+}
+.notification.is-active {
+    display: block;
+}
+.dark-mode .notification {
+  background-color: #b9f843;
+  color: rgb(26, 5, 5);
+}
+.is-hidden {
+    opacity: 0;
+    transform: scale(0.9);
+    pointer-events: none;
+}
+</style>
+</head>
+    <section class="section">
+        <div class="container">
+        <div class="columns is-centered">
+        <div class="column is-three-fifths">
+            <h1 class="title is-5 mt-6 mb-5">🗂 Random Words</h1>
+                <div class="toggle-container mb-5" style="display: flex; justify-content: center; align-items: center;">
+                  <label class="switch">
+                      <input type="checkbox" id="darkModeToggle">
+                      <span class="slider"></span>
+                  </label>
+              </div>
+            <div id="wordContainer" class="word-container box">
+                <div class="word-box">
+                    <p id="word">Loading...</h1>
+                    <p id="definition">Please wait...</p>
+                    <p id="pronunciation">Loading...</p>
+                </div>
+            </div>
+            <div class="has-text-centered">
+                <button class="button is-info" onclick="fetchWordData()">Refresh Word</button>
+            </div>
+            <div id="notification" class="notification is-hidden"></div>
+        </div>
+        </div>
+        </div>
+    </section>
+<script>
+const canonicalLink = document.createElement('link');
+canonicalLink.setAttribute('rel', 'canonical');
+canonicalLink.setAttribute('href', window.location.href);
+
+  document.head.appendChild(canonicalLink);
+    const toggle = document.getElementById('darkModeToggle');
+    const body = document.body;
+
+    function applyTheme(theme) {
+        if (theme === 'dark') {
+            body.classList.add('dark-mode');
+            toggle.checked = true;
+        } else {
+            body.classList.remove('dark-mode');
+            toggle.checked = false;
+        }
+    }
+
+    function initTheme() {
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            applyTheme(savedTheme);
+        } else {
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            applyTheme(prefersDark ? 'dark' : 'light');
+        }
+    }
+
+    toggle.addEventListener('change', () => {
+        const newTheme = toggle.checked ? 'dark' : 'light';
+        applyTheme(newTheme);
+        localStorage.setItem('theme', newTheme);
+    });
+
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+        const newSystemTheme = e.matches ? 'dark' : 'light';
+        const savedTheme = localStorage.getItem('theme');
+        if (!savedTheme) {
+            applyTheme(newSystemTheme);
+        }
+    });
+  
+    initTheme();
+        async function fetchWordData() {
+            try {
+                const response = await fetch('/words');
+                const data = await response.json();
+                if (data.error) {
+                    showNotification('Error fetching word data. Please try again.', 'danger');
+                } else {
+                    displayWordData(data[0]);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showNotification('Error fetching word data. Please try again.', 'danger');
+            }
+        }
+        function displayWordData(wordData) {
+            const wordElement = document.getElementById('word');
+            const definitionElement = document.getElementById('definition');
+            const pronunciationElement = document.getElementById('pronunciation');
+
+            wordElement.textContent = '✍️ Word: ' + wordData.word || 'Not Found';
+            definitionElement.textContent = '📚 Definition: ' + (wordData.definition || 'Not Found');
+            pronunciationElement.textContent = '🗣 Pronunciation: ' + (wordData.pronunciation || 'Not Found');
+        }
+        function showNotification(message, type = 'warning') {
+            const notificationElement = document.getElementById('notification');
+            notificationElement.classList.remove('is-hidden');
+            notificationElement.classList.add(`is-${type}`);
+            notificationElement.textContent = message;
+        }
+        window.onload = fetchWordData;
+</script>
+</body>
+</html>
